@@ -6,6 +6,7 @@ import useData from "./useData";
 const initialCustomer = { fullName: "", email: "", phone: "" };
 const initialAddress = { line: "", city: "", country: "" };
 const ITEMS_PER_PAGE = 10;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useOrderForm = (validateOrderForm) => {
     const toast = useToast();
@@ -21,7 +22,7 @@ export const useOrderForm = (validateOrderForm) => {
     const [searchPage, setSearchPage] = useState(1); // ✅ NEW
 
     useEffect(() => {
-        fetch("http://localhost:4000/skus")
+        fetch(`${API_URL}/skus`)
             .then((res) => res.json())
             .then((data) => setSkus(data.filter((s) => s.status === "Active")));
     }, []);

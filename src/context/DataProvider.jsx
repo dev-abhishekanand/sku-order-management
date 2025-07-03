@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import DataContext from "./DataContext";
 
 const USE_API = true;
-const API_URL = "http://localhost:4000";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export const DataProvider = ({ children }) => {
     const [skus, setSkus] = useState([]);
