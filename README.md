@@ -77,6 +77,8 @@ Create a `.env` file in your root directory:
 
 ```env
 VITE_API_URL=http://localhost:4000
+VITE_API_URL=https://sku-order-management.onrender.com
+
 ```
 
 Access it in your code using:
