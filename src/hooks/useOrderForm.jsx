@@ -54,18 +54,6 @@ export const useOrderForm = (validateOrderForm) => {
         setAddress((prev) => ({ ...prev, [name]: value }));
     };
 
-    // const handleSearch = (e) => {
-    //     const term = e.target.value;
-    //     setSearchTerm(term);
-    //     const filtered = skus
-    //         .filter((sku) =>
-    //             sku.name.toLowerCase().includes(term.toLowerCase())
-    //         )
-    //         .slice(0, 10);
-    //     setSearchPage(1);
-
-    //     setFilteredSkus(filtered);
-    // };
 
     const addItem = (sku) => {
         if (orderItems.find((item) => item.code === sku.code)) return;
@@ -121,7 +109,7 @@ export const useOrderForm = (validateOrderForm) => {
         addItem,
         updateQuantity,
         handleSubmit,
-        onLoadMore: loadMoreSearchResults, // ✅ expose this
+        onLoadMore: loadMoreSearchResults,
 
     };
 };

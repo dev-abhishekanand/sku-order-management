@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import DataContext from "./DataContext";
 import { API_URL } from "../constants";
-
 const USE_API = true;
 
 
