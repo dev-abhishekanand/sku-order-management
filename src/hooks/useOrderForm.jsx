@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { useToast } from "./useToast";
 import useData from "./useData";
+import { API_URL } from "../constants";
 
 const initialCustomer = { fullName: "", email: "", phone: "" };
 const initialAddress = { line: "", city: "", country: "" };
 const ITEMS_PER_PAGE = 10;
-const API_URL = import.meta.env.VITE_API_URL;
 
 export const useOrderForm = (validateOrderForm) => {
     const toast = useToast();
