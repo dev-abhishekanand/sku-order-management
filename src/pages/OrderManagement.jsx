@@ -60,7 +60,7 @@ const OrderManagement = () => {
             .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
     }, [filteredOrders, currentPage, selectedIds]);
 
-    const toggleSelection = useMemo((id) => {
+    const toggleSelection = useCallback((id) => {
         setSelectedIds((prev) => {
             const newSelectedIds = prev.includes(id)
                 ? prev.filter((x) => x !== id)
@@ -69,7 +69,8 @@ const OrderManagement = () => {
             setAllSelected(newSelectedIds.length === paginatedOrders.length);
             return newSelectedIds;
         });
-    }, [paginatedOrders.length])
+    }, [paginatedOrders]);
+
 
     const handleSelectAll = useCallback((selectAll) => {
         setAllSelected(selectAll);

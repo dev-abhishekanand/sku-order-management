@@ -4,11 +4,9 @@ import DataContext from "./DataContext";
 export const DataProvider = ({ children }) => {
     const [skus, setSkus] = useState([]);
     const [orders, setOrders] = useState([]);
-
     useEffect(() => {
-        const savedSkus = JSON.parse(localStorage.getItem("skus") || "[]");
-        setSkus(savedSkus);
-    }, []);
+        localStorage.setItem("orders", JSON.stringify(orders));
+    }, [orders]);
 
     useEffect(() => {
         const savedSkus = JSON.parse(localStorage.getItem("skus") || "[]");
@@ -26,7 +24,7 @@ export const DataProvider = ({ children }) => {
     }, [orders]);
 
     const addSku = (newSku) => {
-        const newEntry = { ...newSku, id: Date.now() }; // Unique ID
+        const newEntry = { ...newSku, id: Date.now() };
         const updated = [...skus, newEntry];
         setSkus(updated);
     };
@@ -44,12 +42,26 @@ export const DataProvider = ({ children }) => {
         setOrders(updated);
     };
 
-    const editOrder = ({ id, status }) => {
+    const editOrder = (updatedOrder) => {
+        setOrders((prevOrders) =>
+            prevOrders.map((order) =>
+                order.id === updatedOrder.id ? { ...order, ...updatedOrder } : order
+            )
+        );
+    };
+
+    const editMultipleOrders = (ids, status) => {
         const updated = orders.map((order) =>
-            order.id === id ? { ...order, status } : order
+            ids.includes(order.id) && order.status === "New"
+                ? { ...order, status }
+                : order
         );
         setOrders(updated);
+        localStorage.setItem("orders", JSON.stringify(updated));
     };
+
+
+
 
     return (
         <DataContext.Provider
@@ -62,6 +74,7 @@ export const DataProvider = ({ children }) => {
                 editSku,
                 addOrder,
                 editOrder,
+                editMultipleOrders,
             }}
         >
             {children}
