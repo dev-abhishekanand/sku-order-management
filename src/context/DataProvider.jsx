@@ -1,94 +1,71 @@
 import { useEffect, useState } from "react";
 import DataContext from "./DataContext";
-import { API_URL } from "../constants";
-const USE_API = true;
-
 
 export const DataProvider = ({ children }) => {
     const [skus, setSkus] = useState([]);
     const [orders, setOrders] = useState([]);
+
     useEffect(() => {
-        if (USE_API) {
-            fetch(`${API_URL}/skus`).then(res => res.json()).then(setSkus);
-            fetch(`${API_URL}/orders`).then(res => res.json()).then(setOrders);
-        } else {
-            const savedSkus = localStorage.getItem("skus");
-            const savedOrders = localStorage.getItem("orders");
-            if (savedSkus && skus.length === 0) setSkus(JSON.parse(savedSkus));
-            if (savedOrders && orders.length === 0) setOrders(JSON.parse(savedOrders));
-        }
-    }, [skus.length, orders.length]);
+        const savedSkus = JSON.parse(localStorage.getItem("skus") || "[]");
+        setSkus(savedSkus);
+    }, []);
 
+    useEffect(() => {
+        const savedSkus = JSON.parse(localStorage.getItem("skus") || "[]");
+        const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+        setSkus(savedSkus);
+        setOrders(savedOrders);
+    }, []);
 
-    const addSku = async (newSku) => {
-        if (USE_API) {
-            const res = await fetch(`${API_URL}/skus`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newSku),
-            });
-            const created = await res.json();
-            setSkus(prev => [...prev, created]);
-        } else {
-            const updated = [...skus, newSku];
-            setSkus(updated);
-            localStorage.setItem("skus", JSON.stringify(updated));
-        }
-    };
-    const editSku = async (updatedSku) => {
-        await fetch(`${API_URL}/skus/${updatedSku.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedSku),
-        });
-        const refreshed = await fetch(`${API_URL}/skus`).then((r) => r.json());
-        setSkus(refreshed);
+    useEffect(() => {
+        localStorage.setItem("skus", JSON.stringify(skus));
+    }, [skus]);
+
+    useEffect(() => {
+        localStorage.setItem("orders", JSON.stringify(orders));
+    }, [orders]);
+
+    const addSku = (newSku) => {
+        const newEntry = { ...newSku, id: Date.now() }; // Unique ID
+        const updated = [...skus, newEntry];
+        setSkus(updated);
     };
 
-    const addOrder = async (newOrder) => {
-        if (USE_API) {
-            const res = await fetch(`${API_URL}/orders`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newOrder),
-            });
-            const created = await res.json();
-            setOrders(prev => [...prev, created]);
-        } else {
-            const updated = [...orders, newOrder];
-            setOrders(updated);
-            localStorage.setItem("orders", JSON.stringify(updated));
-        }
+    const editSku = (updatedSku) => {
+        const updated = skus.map((sku) =>
+            sku.id === updatedSku.id ? updatedSku : sku
+        );
+        setSkus(updated);
     };
 
-    const editOrder = async ({ id, status }) => {
-        try {
+    const addOrder = (newOrder) => {
+        const newEntry = { ...newOrder, id: Date.now() };
+        const updated = [...orders, newEntry];
+        setOrders(updated);
+    };
 
-            const resGet = await fetch(`${API_URL}/orders/${id}`);
-            if (!resGet.ok) throw new Error("Order not found");
-
-            const fullOrder = await resGet.json();
-
-            const updatedOrder = { ...fullOrder, status };
-            console.log('updatedOrder', updatedOrder)
-            const resPut = await fetch(`${API_URL}/orders/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedOrder),
-            });
-
-            if (!resPut.ok) throw new Error("PUT request failed");
-
-            const refreshed = await fetch(`${API_URL}/orders`).then((r) => r.json());
-            setOrders(refreshed);
-        } catch (err) {
-            console.error(`Failed to update order ${id}:`, err);
-        }
+    const editOrder = ({ id, status }) => {
+        const updated = orders.map((order) =>
+            order.id === id ? { ...order, status } : order
+        );
+        setOrders(updated);
     };
 
     return (
-        <DataContext.Provider value={{ skus, setSkus, orders, setOrders, addOrder, addSku, editSku, editOrder }}>
+        <DataContext.Provider
+            value={{
+                skus,
+                setSkus,
+                orders,
+                setOrders,
+                addSku,
+                editSku,
+                addOrder,
+                editOrder,
+            }}
+        >
             {children}
         </DataContext.Provider>
     );
 };
+

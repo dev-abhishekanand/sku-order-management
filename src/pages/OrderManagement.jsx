@@ -100,7 +100,7 @@ const OrderManagement = () => {
 
         await Promise.all(ids.map((id) => editOrder({ id, status })));
 
-        toast.success(`Marked ${ids.length} order(s) as ${status}`);
+        // toast.success(`Marked ${ids.length} order(s) as ${status}`);
         setConfirmStatus(null);
         setSelectedIds([]);
         setAllSelected(false);

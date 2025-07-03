@@ -1,8 +1,6 @@
-// hooks/useOrderForm.js
 import { useEffect, useState } from "react";
 import { useToast } from "./useToast";
 import useData from "./useData";
-import { API_URL } from "../constants";
 
 const initialCustomer = { fullName: "", email: "", phone: "" };
 const initialAddress = { line: "", city: "", country: "" };
@@ -10,7 +8,7 @@ const ITEMS_PER_PAGE = 10;
 
 export const useOrderForm = (validateOrderForm) => {
     const toast = useToast();
-    const { addOrder } = useData();
+    const { addOrder, skus: allSkus } = useData();
 
     const [skus, setSkus] = useState([]);
     const [customer, setCustomer] = useState(initialCustomer);
@@ -19,13 +17,15 @@ export const useOrderForm = (validateOrderForm) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredSkus, setFilteredSkus] = useState([]);
     const [formErrors, setFormErrors] = useState({});
-    const [searchPage, setSearchPage] = useState(1); // ✅ NEW
+    const [searchPage, setSearchPage] = useState(1);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
 
     useEffect(() => {
-        fetch(`${API_URL}/skus`)
-            .then((res) => res.json())
-            .then((data) => setSkus(data.filter((s) => s.status === "Active")));
-    }, []);
+        const activeSkus = allSkus.filter((s) => s.status === "Active");
+        setSkus(activeSkus);
+    }, [allSkus]);
+
 
     useEffect(() => {
         const results = skus.filter((sku) =>
@@ -37,11 +37,11 @@ export const useOrderForm = (validateOrderForm) => {
     const handleSearch = (e) => {
         const term = e.target.value;
         setSearchTerm(term);
-        setSearchPage(1); // Reset page on new search
+        setSearchPage(1);
     };
 
     const loadMoreSearchResults = () => {
-        setSearchPage((prev) => prev + 1); // This triggers `useEffect` to fetch more
+        setSearchPage((prev) => prev + 1);
     };
     const handleCustomerChange = (e) => {
         const { name, value } = e.target;
@@ -93,6 +93,21 @@ export const useOrderForm = (validateOrderForm) => {
 
         await addOrder(order);
         toast("Order successfully created!");
+
+        setShowSuccessModal(true);
+
+        setCustomer({ fullName: "", email: "", phone: "" });
+        setAddress({ line: "", city: "", country: "" });
+        setOrderItems([]);
+        setFormErrors({});
+    };
+
+    const resetForm = () => {
+        setShowSuccessModal(false);
+        setCustomer(initialCustomer);
+        setAddress(initialAddress);
+        setOrderItems([]);
+        setFormErrors({});
     };
 
     return {
@@ -110,6 +125,7 @@ export const useOrderForm = (validateOrderForm) => {
         updateQuantity,
         handleSubmit,
         onLoadMore: loadMoreSearchResults,
-
+        resetForm,
+        showSuccessModal
     };
 };

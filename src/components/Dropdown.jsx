@@ -14,7 +14,6 @@ const Dropdown = ({
 }) => {
     const listRef = useRef(null);
 
-    // Handle scroll for infinite loading
     const handleScroll = () => {
         const list = listRef.current;
         if (!list) return;
@@ -24,7 +23,6 @@ const Dropdown = ({
         }
     };
 
-    // Focus on input when component mounts
     const inputRef = useRef(null);
     useEffect(() => {
         inputRef.current?.focus();
