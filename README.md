@@ -1,121 +1,104 @@
-# sku-order-management
+# Omniful OMS – Order & SKU Management System
 
-Here’s a clean and professional `README.md` file for your project that uses **Vite** for the frontend and **JSON Server** as a mock backend.
-
----
-
-### ✅ `README.md`
-
-```markdown
-# Omniful OMS – SKU & Order Management System
-
-A modern single-page application (SPA) built with **React (Vite)** for managing SKUs and Orders, backed by a mock API using **JSON Server**.
+A lightweight **Order Management System (OMS)** built using **React (Vite)** and **JSON Server**. It includes features like SKU management, order creation, filtering, pagination, infinite scroll, status updates, and modular UI components.
 
 ---
 
-## 🚀 Features
+## 🚀 Tech Stack
 
-- 📦 SKU Management: Create, update, and filter SKUs by status
-- 📋 Order Management: View, filter, update status, and create new orders
-- 🔍 Search with infinite scroll in dropdowns
-- 📊 Pagination, sorting, and bulk actions
-- 🌈 Clean, responsive UI built with Tailwind CSS
-- ⚙️ Mock RESTful API powered by JSON Server
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend:** React + Vite
-- **UI:** Tailwind CSS + Lucide Icons
-- **Routing:** React Router
-- **State Management:** React Context API
-- **Mock API:** JSON Server
+- ⚛️ React + Vite
+- 🎨 Tailwind CSS
+- 🗂 JSON Server (Mock Backend)
+- ♻️ Reusable & Modular Components
 
 ---
 
 ## 📁 Project Structure
+
 ```
-
-├── public/
-├── src/
-│ ├── components/ # Reusable UI components
-│ ├── context/ # Global data context
-│ ├── hooks/ # Custom React hooks
-│ ├── pages/ # Page-level components (SKUs, Orders, Dashboard)
-│ ├── utils/ # Utility functions like column definitions
-│ └── App.jsx # Main App component with routing
-├── db.json # JSON Server database
-├── vite.config.js # Vite config
+├── src
+│   ├── components       # Reusable UI components
+│   ├── context          # Global state (DataContext)
+│   ├── hooks            # Custom hooks
+│   ├── pages            # Main views (Order, SKUs)
+│   ├── utils            # Utility functions
+│   └── App.jsx          # Root component
+├── db.json              # JSON Server mock database
+├── .env                 # Environment variables
 └── README.md
-
-````
+```
 
 ---
 
-## 🧪 Getting Started
+## 🛠 Setup Instructions
 
-### 1. Clone the repository
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/omniful-oms.git
-cd omniful-oms
-````
+git clone https://github.com/dev-abhishekanand/sku-order-management.git
+cd sku-order-management
+```
 
-### 2. Install dependencies
+---
+
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Start the JSON Server (mock backend)
+---
+
+### 3️⃣ Start JSON Server
+
+Make sure `db.json` is present in the root directory.
 
 ```bash
 npx json-server --watch db.json --port 4000
 ```
 
-This will start the API at: [http://localhost:4000](http://localhost:4000)
+JSON Server will run at ➡️ `http://localhost:4000`
 
 ---
 
-### 4. Start the Vite development server (frontend)
+### 4️⃣ Start the React App
 
 ```bash
 npm run dev
 ```
 
-Open your browser at: [http://localhost:5173](http://localhost:5173)
+React app will run at ➡️ `http://localhost:5173`
 
 ---
 
 ## 🔐 Environment Variables
 
-No `.env` is required unless you want to externalize the API URL. Default is:
+Create a `.env` file in your root directory:
+
+```env
+VITE_API_URL=http://localhost:4000
+```
+
+Access it in your code using:
 
 ```js
-const API_URL = "http://localhost:4000";
+const API_URL = import.meta.env.VITE_API_URL;
 ```
 
 ---
 
-## 📦 Build for Production
+## ✅ Features
 
-```bash
-npm run build
-```
-
----
-
-## ✍️ Author
-
-**Your Name** – [dev-abhishekanand](https://github.com/dev-abhishekanand)
+- ✅ Create & update SKUs with status
+- 🔍 SKU filtering and search
+- 📋 Order creation with customer, address, item details
+- 🔽 Infinite scroll dropdown for SKUs while typing
+- 🚦 Order status updates (New → Delivered/Cancelled)
+- 📊 Paginated views with sorting and search
+- 🧩 Reusable component architecture (Table, Modal, Button, Dropdown, etc.)
 
 ---
 
-## 📝 License
+## 📄 License
 
-This project is licensed under the MIT License.
-
-```
-
-```
+MIT © 2025 – Open Source Project
